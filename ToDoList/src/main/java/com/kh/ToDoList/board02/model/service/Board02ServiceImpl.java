@@ -1,12 +1,16 @@
 package com.kh.ToDoList.board02.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.ToDoList.board02.model.dao.Board02Dao;
+import com.kh.ToDoList.board02.model.vo.Board02;
 import com.kh.ToDoList.board02.model.vo.TodoList02;
 
 @Service
@@ -41,6 +45,43 @@ public class Board02ServiceImpl implements Board02Service {
 	@Override
 	public int deleteAllDay() {
 		return board02Dao.deleteAllDay(sqlSession);
+	}
+
+	@Override
+	public List<Board02> selectBoardList(int page, int pageSize) {
+		
+		int offset = (page - 1) * pageSize;
+		int end = page * pageSize;
+		Map<String, Integer> paramMap = new HashMap<>();
+		paramMap.put("start", offset + 1);
+		paramMap.put("end", end);
+		
+		return board02Dao.selectBoardList(sqlSession, paramMap);
+	}
+
+	@Override
+	public int selectTotalCount() {
+		return board02Dao.selectTotalCount(sqlSession);
+	}
+
+	@Override
+	public int insertPost(String titleInput, String nameInput, String descTextArea) {
+		return board02Dao.insertPost(sqlSession, titleInput, nameInput, descTextArea);
+	}
+
+	@Override
+	public Board02 selectBoardOne(int hiddenNo) {
+		return board02Dao.selectBoardOne(sqlSession, hiddenNo);
+	}
+
+	@Override
+	public int confirmUpdate(Map<String, Object> parameter) {
+		return board02Dao.confirmUpdate(sqlSession, parameter);
+	}
+
+	@Override
+	public int deletePost(int boardNo) {
+		return board02Dao.deletePost(sqlSession, boardNo);
 	}
 	
 }
